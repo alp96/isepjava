@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Fenetre extends JFrame {
+public class Window extends JFrame {
     private ArrayList <Territory> Territories = new ArrayList<>();
 
 
-    public Fenetre(String whatIsItMan, int width, int height) {
+    public Window(String whatIsItMan, int width, int height) {
         ReadTheFileHarry();
         if (whatIsItMan.equals("map")) {
             this.setTitle("RISK");

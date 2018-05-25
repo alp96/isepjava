@@ -1,12 +1,12 @@
 /**
  * 
  */
-public class Rider extends Unit {
+public class Cavalry extends Unit {
 
     /**
      * Default constructor
      */
-    public Rider() {
+    public Cavalry() {
 
     }
 
