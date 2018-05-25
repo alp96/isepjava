@@ -205,7 +205,7 @@ public class Menu extends JFrame {
                     Player player = new Player(name, colorOfPlayer[i]);
                     System.out.println(player.getName() + " : " + player.getColor());
                 }
-                new Fenetre("map", 1125, 559);
+                new Window("map", 1125, 559);
                 closeWindow();
             }
             // check if name is not empty, if not too long [DONE]

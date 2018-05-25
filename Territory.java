@@ -1,10 +1,5 @@
 import java.util.ArrayList;
 import java.awt.Color;
-import java.util.TreeMap;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.Map;
 
 
 public class Territory {
@@ -28,7 +23,7 @@ public class Territory {
      */
     private Player player;
     private ArrayList<Soldier> army_soldiers = new ArrayList<>();
-    private ArrayList<Rider> army_riders = new ArrayList<>();
+    private ArrayList<Cavalry> army_cavalries = new ArrayList<>();
     private ArrayList<Cannon> army_cannons = new ArrayList<>();
 
 
@@ -77,12 +72,12 @@ public class Territory {
         this.army_soldiers = army_soldiers;
     }
 
-    public ArrayList<Rider> getArmy_riders() {
-        return army_riders;
+    public ArrayList<Cavalry> getArmy_cavalries() {
+        return army_cavalries;
     }
 
-    public void setArmy_riders(ArrayList<Rider> army_riders) {
-        this.army_riders = army_riders;
+    public void setArmy_cavalries(ArrayList<Cavalry> army_cavalries) {
+        this.army_cavalries = army_cavalries;
     }
 
     public ArrayList<Cannon> getArmy_cannons() {
