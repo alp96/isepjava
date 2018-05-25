@@ -8,6 +8,7 @@ public class Player {
 
     private String name;
     private Color color;
+    private int _reserve;
 
     /**
      * Default constructor
@@ -15,39 +16,36 @@ public class Player {
     public Player(String name, Color color) {
         this.name = name;
         this.color = color;
+        this._reserve = 40;
     }
 
-
-
-
-
-
-    /**
-     * @param name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * @return
-     */
+
     public String getName() {
         return this.name;
     }
 
-    /**
-     * @param color
-     */
     public void setColor(Color color) {
         this.color = color;
     }
 
-    /**
-     * @return
-     */
     public Color getColor() {
         return this.color;
+    }
+    public getReserve()
+    {
+    return _reserve;
+    }
+    public ravitaillement(int nbTroupes)
+    {
+    _reserve -= nbTroupes;
+    }
+    public perteTroupes(int nbTroupes)
+    {
+    _reserve += nbTroupes;
     }
 
 }
