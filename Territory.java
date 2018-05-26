@@ -5,7 +5,6 @@ import java.awt.Color;
 public class Territory {
 
 
-
     //
     // Attributes //////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -87,7 +86,7 @@ public class Territory {
     public void setArmy_cannons(ArrayList<Cannon> army_cannons) {
         this.army_cannons = army_cannons;
     }
-
+}
 
 
 

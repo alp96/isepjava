@@ -143,7 +143,7 @@ public class Window extends JFrame {
                 if (territory.getName().equals(line_adj[0])) {
                     String[] adjacents = line_adj[1].split(",");
                     for (String adjacent : adjacents) {
-                        territory.addAdjacents(getTerritoryByName(adjacent));
+                        //territory.addAdjacents(getTerritoryByName(adjacent));
                     }
                 }
             }
