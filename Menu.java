@@ -200,13 +200,13 @@ public class Menu extends JFrame {
                 setErrorText("color");
             }
             if (nameOK && colorOK){
-                for (int i=0; i<getNumberOfPlayers(); i++) {
+                /*for (int i=0; i<getNumberOfPlayers(); i++) {
                     String name = namePlayers.get(i).getText();
                     Player player = new Player(name, colorOfPlayer[i]);
                     System.out.println(player.getName() + " : " + player.getColor());
                 }
                 new Window("map", 1125, 559);
-                closeWindow();
+                closeWindow();*/
             }
             // check if name is not empty, if not too long [DONE]
             // check if all players have different colors [DONE]

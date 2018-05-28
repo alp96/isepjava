@@ -7,7 +7,7 @@ public class Cavalry extends Unit {
      * Default constructor
      */
     public Cavalry() {
-        super(7, 4, 9, 0.1, 0.2, 1);
+        super(3, 2, 7, 1, 3, 3);
     }
 
 }
