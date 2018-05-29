@@ -12,7 +12,8 @@ public class Player {
     private Color color;
     private int mission;
     public int ravitaillement;
-    List<String> territoire = new LinkedList<>();
+    List<Integer> territoire = new LinkedList<>();
+    boolean isHuman;
 
 
     /**
@@ -25,7 +26,7 @@ public class Player {
         this.ravitaillement = ravitaillement;
     }
 
-    public void setPays(List<String> ter){
+    public void setPays(List<Integer> ter){
         this.territoire=ter;
     }
 
@@ -45,11 +46,11 @@ public class Player {
         this.mission = mission;
     }
 
-    public List<String> getTerritoire() {
+    public List<Integer> getTerritoire() {
         return territoire;
     }
 
-    public void setTerritoire(List<String> territoire) {
+    public void setTerritoire(List<Integer> territoire) {
         this.territoire = territoire;
     }
 
