@@ -9,7 +9,7 @@ public class Territoire {
     int id;
     int region;
     int territoire;
-    private List<String> adajacent = new ArrayList<>();
+    List<Integer> adajacent = new LinkedList<Integer>();
     List<Soldier> soldier = new LinkedList<>();
     List<Cannon> cannon = new LinkedList<>();
     List<Cavalry> cavalry = new LinkedList<>();
@@ -20,6 +20,4 @@ public class Territoire {
         this.territoire = territoire;
         this.id = id;
     }
-
-
 }

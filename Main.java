@@ -1,3 +1,5 @@
+import jdk.management.cmm.SystemResourcePressureMXBean;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -8,7 +10,7 @@ import static java.lang.Thread.sleep;
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
+
         Interface test = new Interface();
 
         int nombre_joueur = 5;
@@ -28,6 +30,19 @@ public class Main {
                 "0604","0605","0606","0607"));
 
         //List<String> nom_joueur = new LinkedList<>(Arrays.asList("Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5", "Joueur 6"));
+
+        List<String> liste_relation = new LinkedList<>(Arrays.asList("0002","0003","0102","0103","0121","0200","0201","0203",
+                "0300","0301","0302","0405","0409","0418","0504","0509","0510","0512","0607","0612","0634","0706","0710",
+                "0711","0712","0809","0810","0811","0836","0904","0905","0908","0910","1005","1007","1008","1009","1011",
+                "1012","1107","1108","1110","1205","1206","1207","1210","1314","1315","1319","1323","1340","1413","1415",
+                "1420","1421","1422","1423","1513","1514","1519","1521","1618","1620","1622","1624","1718","1720","1804",
+                "1816","1817","1820","1824","1913","1915","1926","1927","1939","1940","2014","2016","2017","2018","2022",
+                "2101","2114","2115","2214","2216","2220","2223","2224","2313","2314","2322","2340","2416","2418","2422",
+                "2526","2529","2530","2619","2625","2627","2628","2629","2630","2719","2726","2729","2739","2826","2830",
+                "2925","2926","2927","2932","2941","3025","3026","3028","3132","3133","3229","3231","3233","3234","3331",
+                "3332","3334","3406","3432","3433","3536","3537","3538","3541","3629","3635","3637","3639","3735","3738",
+                "3739","3740","3741","3835","3836","3837","3840","3919","3927","3937","3940","3941","4013","4019","4023",
+                "4037","4038","4039","4135","4137","4139","4129"));
 
         List<Unit> liste_unite = new ArrayList<Unit>();
         liste_unite.add(new Soldier());
@@ -55,7 +70,10 @@ public class Main {
 
         }
 
-
+        //génération des relations entre pays
+        for (int k = 0; k < liste_relation.size(); k++){
+            liste_pays2.get(Integer.valueOf(liste_relation.get(k).substring(0,2))).adajacent.add(Integer.valueOf(liste_relation.get(k).substring(2,4)));
+        }
 
         //instantiation des missions
         List<Mission> liste_mission;
@@ -115,7 +133,7 @@ public class Main {
                 int choix_unite;
                 do {
                     choix_unite = ThreadLocalRandom.current().nextInt(0, 3);
-                } while (liste_unite.get(choix_unite).getCost() >= liste_joueur.get(k).ravitaillement);
+                } while (liste_unite.get(choix_unite).getCost() > liste_joueur.get(k).ravitaillement);
                 int choix_pays = ThreadLocalRandom.current().nextInt(0, liste_joueur.get(k).territoire.size());
                 if (choix_unite == 0) {
                     liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).soldier.add(new Soldier());
@@ -130,17 +148,17 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < nombre_joueur; i++) {
+        for (int i = 0; i < nombre_joueur; i++) { //Affichage des territoires possédés par joueurs
             System.out.println("\nLe " + liste_joueur.get(i).getName() + " a comme territoires :");
             Collections.sort(liste_joueur.get(i).territoire); // tri des listes de territoires
             for (int j = 0; j < liste_joueur.get(i).territoire.size(); j++) {
                 System.out.print(liste_joueur.get(i).territoire.get(j) + " ");
             }
-            System.out.println("Il lui reste " + liste_joueur.get(i).ravitaillement + " renfort");
+            System.out.println("\nIl lui reste " + liste_joueur.get(i).ravitaillement + " renfort");
         }
 
         System.out.println(" ");
-        while (0<1) {
+        while (0<1) { //affhichage des territoires au choix du joueur
             Scanner sc = new Scanner(System.in);
             int i = sc.nextInt();
             Territoire pays_test = liste_pays2.get(i);
@@ -150,6 +168,11 @@ public class Main {
                     " de la région " + pays_test.region + " et est la propriété de " + liste_joueur.get(pays_test.owner).getName());
             System.out.println("Y sont stationnés " + pays_test.soldier.size() + " soldats, " + pays_test.cavalry.size()
                     + " cavaliers et " + pays_test.cannon.size() + " canons.");
+            System.out.println("Le pays a comme pays frontaliers : ");
+            for (int k = 0; k < pays_test.adajacent.size(); k++){
+                System.out.print(liste_pays2.get(pays_test.adajacent.get(k)).name + "   ");
+            }
+            System.out.println("\n");
         }
     }
 }
