@@ -29,6 +29,11 @@ public class Main {
 
         //List<String> nom_joueur = new LinkedList<>(Arrays.asList("Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5", "Joueur 6"));
 
+        List<Unit> liste_unite = new ArrayList<Unit>();
+        liste_unite.add(new Soldier());
+        liste_unite.add(new Cavalry());
+        liste_unite.add(new Cannon());
+
         List<Territoire> liste_pays2 = new ArrayList<Territoire>();
         for (int k  = 0; k < 42; k++){
             int region = Integer.valueOf(liste_pays.get(k).substring(0, 2));
@@ -91,7 +96,11 @@ public class Main {
 
             int pays_choisi = liste_pays3.get(choix_pays);
             liste_joueur.get(compteur).territoire.add(pays_choisi);
-            liste_pays2.get(pays_choisi).owner = compteur;
+            liste_pays2.get(pays_choisi).owner = compteur; //assigne le pays à un joueur
+
+            liste_pays2.get(pays_choisi).soldier.add(new Soldier()); //Assigne un soldat au pays.
+            liste_joueur.get(compteur).ravitaillement--; //retrait d'un soldat au total tavitaillement
+
             liste_pays3.remove(choix_pays);
 
             compteur++;
@@ -99,26 +108,48 @@ public class Main {
             if (compteur > nombre_joueur - 1){
                 compteur = 0;
             }
-
         }
+
+        for (int k = 0; k < nombre_joueur; k++){
+            while(liste_joueur.get(k).ravitaillement > 0) {
+                int choix_unite;
+                do {
+                    choix_unite = ThreadLocalRandom.current().nextInt(0, 3);
+                } while (liste_unite.get(choix_unite).getCost() >= liste_joueur.get(k).ravitaillement);
+                int choix_pays = ThreadLocalRandom.current().nextInt(0, liste_joueur.get(k).territoire.size());
+                if (choix_unite == 0) {
+                    liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).soldier.add(new Soldier());
+                }
+                else if(choix_unite == 1){
+                    liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cavalry.add(new Cavalry());
+                }
+                else{
+                    liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cannon.add(new Cannon());
+                }
+                liste_joueur.get(k).ravitaillement -= liste_unite.get(choix_unite).getCost();
+            }
+        }
+
         for (int i = 0; i < nombre_joueur; i++) {
             System.out.println("\nLe " + liste_joueur.get(i).getName() + " a comme territoires :");
             Collections.sort(liste_joueur.get(i).territoire); // tri des listes de territoires
             for (int j = 0; j < liste_joueur.get(i).territoire.size(); j++) {
                 System.out.print(liste_joueur.get(i).territoire.get(j) + " ");
             }
+            System.out.println("Il lui reste " + liste_joueur.get(i).ravitaillement + " renfort");
         }
 
         System.out.println(" ");
-
         while (0<1) {
             Scanner sc = new Scanner(System.in);
             int i = sc.nextInt();
             Territoire pays_test = liste_pays2.get(i);
 
-            System.out.println(pays_test.owner);
+            //System.out.println(pays_test.owner);
             System.out.println("Le territoire " + pays_test.name + " est le territoire " + pays_test.territoire +
                     " de la région " + pays_test.region + " et est la propriété de " + liste_joueur.get(pays_test.owner).getName());
+            System.out.println("Y sont stationnés " + pays_test.soldier.size() + " soldats, " + pays_test.cavalry.size()
+                    + " cavaliers et " + pays_test.cannon.size() + " canons.");
         }
     }
 }
