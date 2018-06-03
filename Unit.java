@@ -11,6 +11,8 @@ public abstract class Unit {
     private int max_power;
     private int priorityATT;
     private int priorityDEF;
+    public int id;
+    public String name;
 
     /**
      * Movement per turn and counter per turn
@@ -19,13 +21,15 @@ public abstract class Unit {
     private int cpt = 0;
 
 
-    public Unit(int cost, int min_power, int max_power, int priorityATT, int priorityDEF, int mpt) {
+    public Unit(String name, int id, int cost, int min_power, int max_power, int priorityATT, int priorityDEF, int mpt) {
         this.cost = cost;
         this.min_power = min_power;
         this.max_power = max_power;
         this.priorityATT = priorityATT;
         this.priorityDEF = priorityDEF;
         this.mpt = mpt;
+        this.name = name;
+        this.id = id;
     }
 
     public int getCost() {
