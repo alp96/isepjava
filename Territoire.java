@@ -20,4 +20,16 @@ public class Territoire {
         this.territoire = territoire;
         this.id = id;
     }
+
+    public Territoire(Territoire other) {
+        this.name = other.name;
+        this.region = other.region;
+        this.territoire = other.territoire;
+        this.id = other.id;
+        this.adajacent = other.adajacent;
+        this.owner = other.owner;
+        this.soldier = other.soldier;
+        this.cannon = other.cannon;
+        this.cavalry = other.cavalry;
+    }
 }

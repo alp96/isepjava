@@ -5,13 +5,14 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.floor;
 import static java.lang.Thread.sleep;
 
 public class Main {
 
-    public static void ravitaillement(int nombre_joueur, List<Player> liste_joueur, List<Unit> liste_unite, List<Territoire> liste_pays2){
+    public static void ravitaillement(int nombre_joueur, List<Player> liste_joueur, List<Unit> liste_unite, List<Territoire> liste_territoire){
         for (int k = 0; k < nombre_joueur; k++){
             while(liste_joueur.get(k).ravitaillement > 0) {
                 int choix_unite;
@@ -20,63 +21,100 @@ public class Main {
                 } while (liste_unite.get(choix_unite).getCost() > liste_joueur.get(k).ravitaillement);
                 int choix_pays = ThreadLocalRandom.current().nextInt(0, liste_joueur.get(k).territoire.size());
                 if (choix_unite == 0) {
-                    liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).soldier.add(new Soldier());
+                    liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).soldier.add(new Soldier());
                 }
                 else if(choix_unite == 1){
-                    liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cavalry.add(new Cavalry());
+                    liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cavalry.add(new Cavalry());
                 }
                 else{
-                    liste_pays2.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cannon.add(new Cannon());
+                    liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cannon.add(new Cannon());
                 }
                 liste_joueur.get(k).ravitaillement -= liste_unite.get(choix_unite).getCost();
             }
         }
     }
 
-    public static List<List<Territoire>> chemin(int id_joueur, int nombre_deplacement, List<List<Territoire>> pays, List<Territoire> liste_pays){
-        if (id_joueur == 0) {
-            int taille = pays.size();
-            List<Territoire> ajout = new LinkedList<>();
-            ajout.add(pays.get(0).get(0));
+    public static List<List<Territoire>> chemin(int id_joueur, int nombre_deplacement, List<List<Territoire>> liste_chemin, List<Territoire> liste_territoire){
+        if (id_joueur == 0) { // à virer quand ca fonctionne
 
             if (nombre_deplacement != 0) {
-                for (int k = 0; k < pays.get(0).size(); k++) {
-                    for (int j = 0; j < pays.get(0).get(k).adajacent.size(); j++) {
-                        if (j >= taille) {
-                            pays.add(ajout);
+
+                int longueur = liste_chemin.size();
+                List<List<Territoire>> liste_chemin2 = new LinkedList<>();
+                for (int k = 0; k < longueur; k++){
+                    for (int l = 0; l < liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).adajacent.size(); l++){
+                        List<Territoire> ajout_territoire = new LinkedList<>();
+                        liste_chemin2.add(ajout_territoire);
+                        for (int m = 0; m < liste_chemin.get(k).size() - 1; m++){
+                            //if(id_joueur == liste_territoire.get(liste_chemin.get(k).get(m).id).owner) {
+                                ajout_territoire.add(new Territoire(liste_territoire.get(liste_chemin.get(k).get(m).id)));
+                            //}
+                        }
+                        //if(id_joueur == liste_territoire.get(liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).id).owner) {
+                            ajout_territoire.add(new Territoire(liste_territoire.get(liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).id)));
+                        //}
+                    }
+                }
+
+                //System.out.println(liste_chemin2.size());
+                int id_territoire = -1;
+                int territoire_adjacent = -1;
+
+                for (int k = 0; k < liste_chemin2.size(); k++){
+
+                    int dernier_element = liste_chemin2.get(k).size() - 1;
+                    territoire_adjacent++;
+                    if (id_territoire != liste_chemin2.get(k).get(dernier_element).id){
+                        //System.out.println(calcul + " " + calcul_ancien);
+                        territoire_adjacent = 0;
+                        //System.out.println(liste_territoire.get(liste_chemin2.get(k).get(dernier_element).adajacent.get(territoire_adjacent)));
+                        id_territoire = liste_chemin2.get(k).get(dernier_element).id;
+                    }
+                    //if(id_joueur == liste_territoire.get(liste_chemin2.get(k).get(liste_chemin2.get(k).size() - 1).adajacent.get(territoire_adjacent)).owner) {
+                            liste_chemin2.get(k).add(liste_territoire.get(liste_chemin2.get(k).get(dernier_element).adajacent.get(territoire_adjacent)));
+                    //}
+                }
+
+                for (int k = 0; k < liste_chemin2.size(); k++){
+                    for (int j = 0; j < liste_chemin2.get(k).size(); j++){
+                        //System.out.print(liste_chemin2.get(k).get(j).name + "  ");
+                    }
+                    //System.out.println("      ");
+                }
+
+                List<List<Territoire>> liste_chemin3 = new LinkedList<>();
+                for (int k = 0; k < liste_chemin2.size(); k++){
+                    liste_chemin3.add(new LinkedList<>());
+                    for (int j = 0; j < liste_chemin2.get(k).size(); j++) {
+                        if (j == 0 || j == liste_chemin2.get(k).size() - 1){
+                            liste_chemin3.get(k).add(liste_chemin2.get(k).get(j));
                         }
                     }
                 }
 
-                int compteur = 0;
-                System.out.println(pays);
-                for (int k = 0; k < pays.size(); k++) {
-                    List<Territoire> iemepays = pays.get(k);
-                    Territoire dernier = iemepays.get(pays.get(k).size() - 1);
-                    //System.out.println("Adjacent à ajouter : " + dernier.name);
-                    pays.get(k).add(liste_pays.get(dernier.adajacent.get(compteur)));
-                    //System.out.println("Taille : " + pays.size() + " Pays : " + liste_pays.get(dernier.adajacent.get(compteur)).name + " Compteur " + compteur);
-                    compteur++;
-                }
+                List<List<Territoire>> liste_chemin3_unique = liste_chemin3.stream()
+                        .distinct()               // it will remove duplicate object, It will check duplicate using equals method
+                        .collect(Collectors.toList());
 
-                try {
-                    Thread.sleep(200000);
-                } catch (InterruptedException e) {
-                    System.out.println("main thread interrupted");
-                }
-
-                for (int k = 0; k < pays.size(); k++) {
-                    for (int j = 0; j < pays.get(k).size(); j++) {
-                        //System.out.print(pays.get(k).get(j).name + " ");
+                System.out.println("Essai " + nombre_deplacement);
+                for (Iterator<List<Territoire>> iter = liste_chemin3_unique.listIterator(); iter.hasNext();){
+                    List<Territoire> territoireList = iter.next();
+                    if(territoireList.get(0).id == territoireList.get(territoireList.size() - 1).id){
+                        iter.remove();
                     }
-                    //System.out.print("    ");
                 }
-                System.out.println(pays);
-                //System.out.println(nombre_deplacement);
-                //chemin(id_joueur, nombre_deplacement - 1, pays, liste_pays);
+                for (int k = 0; k < liste_chemin3_unique.size(); k++){
+                    for (int j = 0; j < liste_chemin3_unique.get(k).size(); j++){
+                        System.out.print(liste_chemin3_unique.get(k).get(j).name + "  ");
+                    }
+                    System.out.println("      ");
+                }
+
+
+                chemin(id_joueur, nombre_deplacement-1, liste_chemin3_unique, liste_territoire);
             }
         }
-        return pays;
+        return liste_chemin;
 
     }
 
@@ -128,11 +166,11 @@ public class Main {
         liste_unite.add(new Cavalry());
         liste_unite.add(new Cannon());
 
-        List<Territoire> liste_pays2 = new ArrayList<>();
+        List<Territoire> liste_territoire = new ArrayList<>();
         for (int k  = 0; k < 42; k++){
             int region = Integer.valueOf(liste_pays.get(k).substring(0, 2));
             int territoire = Integer.valueOf(liste_pays.get(k).substring(2, 4));
-            liste_pays2.add(new Territoire(nom_pays.get(k),k,region,territoire));
+            liste_territoire.add(new Territoire(nom_pays.get(k),k,region,territoire));
         }
 
         List<Player> liste_joueur = new LinkedList<>();
@@ -149,7 +187,7 @@ public class Main {
 
         //génération des relations entre pays
         for (int k = 0; k < liste_relation.size(); k++){
-            liste_pays2.get(Integer.valueOf(liste_relation.get(k).substring(0,2))).adajacent.add(Integer.valueOf(liste_relation.get(k).substring(2,4)));
+            liste_territoire.get(Integer.valueOf(liste_relation.get(k).substring(0,2))).adajacent.add(Integer.valueOf(liste_relation.get(k).substring(2,4)));
         }
 
         //instantiation des missions
@@ -189,9 +227,9 @@ public class Main {
 
             int pays_choisi = liste_pays3.get(choix_pays);
             liste_joueur.get(compteur).territoire.add(pays_choisi);
-            liste_pays2.get(pays_choisi).owner = compteur; //assigne le pays à un joueur
+            liste_territoire.get(pays_choisi).owner = compteur; //assigne le pays à un joueur
 
-            liste_pays2.get(pays_choisi).soldier.add(new Soldier()); //Assigne un soldat au pays.
+            liste_territoire.get(pays_choisi).soldier.add(new Soldier()); //Assigne un soldat au pays.
             liste_joueur.get(compteur).ravitaillement--; //retrait d'un soldat au total tavitaillement
 
             liste_pays3.remove(choix_pays);
@@ -204,7 +242,7 @@ public class Main {
         }
 
         //attribution des unités restantes dans les pays
-        ravitaillement(liste_joueur.size(),liste_joueur, liste_unite, liste_pays2);
+        ravitaillement(liste_joueur.size(),liste_joueur, liste_unite, liste_territoire);
 
         //génération de l'ordre de jeu
         List<Integer> ordre_temp = new LinkedList<>();
@@ -242,7 +280,7 @@ public class Main {
                 for (int k = 0; k < liste_joueur.size(); k++){
                     liste_joueur.get(k).ravitaillement = (int) floor(liste_joueur.get(k).territoire.size()/3);
                 }
-                ravitaillement(liste_joueur.size(),liste_joueur, liste_unite, liste_pays2);
+                ravitaillement(liste_joueur.size(),liste_joueur, liste_unite, liste_territoire);
             }
 
             int count;
@@ -252,16 +290,28 @@ public class Main {
 
                 System.out.println("Au tour de " + liste_joueur.get(tour_joueur).getName() + " !");
 
-                List<List<Territoire>> tetest = new LinkedList<List<Territoire>>();
+                List<List<Territoire>> tetest = new LinkedList<>();
                 List<Territoire> tetetest = new LinkedList<>();
-                tetetest.add(liste_pays2.get(liste_joueur.get(0).territoire.get(0)));
+                List<Territoire> tetetest2 = new LinkedList<>();
+                List<List<Territoire>> resultat = new LinkedList<>();
+                tetetest.add(liste_territoire.get(liste_joueur.get(0).territoire.get(0)));
+                //tetetest.add(new Territoire(liste_territoire.get(liste_territoire.get(liste_joueur.get(0).territoire.get(0)).adajacent.get(0))));
+                //tetetest2.add(liste_territoire.get(liste_joueur.get(0).territoire.get(1)));
+                //tetetest2.add(new Territoire(liste_territoire.get(liste_territoire.get(liste_joueur.get(0).territoire.get(1)).adajacent.get(0))));
                 tetest.add(tetetest);
-                chemin(0,2,tetest, liste_pays2);
+                //tetest.add(tetetest2);
+                resultat = chemin(ordre_final.get(count),3,tetest, liste_territoire);
+
+                System.out.println(resultat);
+
+                if(resultat.size() == 1){
+                    System.out.println("Pas de déplacement disponible !");
+                }
 
                 if (liste_joueur.get(tour_joueur).isHuman){
                     System.out.println("Liste de vos territoires (ID) :");
                     for (int j = 0; j < liste_joueur.get(ordre_final.get(count)).territoire.size(); j++) {
-                        System.out.print(liste_pays2.get(liste_joueur.get(ordre_final.get(count)).territoire.get(j)).name + " (" +
+                        System.out.print(liste_territoire.get(liste_joueur.get(ordre_final.get(count)).territoire.get(j)).name + " (" +
                                 liste_joueur.get(ordre_final.get(count)).territoire.get(j) + ")  ");
                     }
                     Scanner scan = new Scanner(System.in);
@@ -277,9 +327,9 @@ public class Main {
                                     scan.nextLine();
                                 }
                             } while (choix < 0 || choix > 41);
-                        } while (liste_pays2.get(choix).owner != ordre_final.get(count));
+                        } while (liste_territoire.get(choix).owner != ordre_final.get(count));
 
-                        Territoire pays_choisi = liste_pays2.get(choix);
+                        Territoire pays_choisi = liste_territoire.get(choix);
 
                         System.out.println(pays_choisi.name + " : territoire " + pays_choisi.territoire +
                                 " de la région " + pays_choisi.region);
@@ -287,8 +337,8 @@ public class Main {
                                 + " cavaliers et " + pays_choisi.cannon.size() + " canons.");
                         System.out.println("Le pays a comme pays frontaliers : ");
                         for (int k = 0; k < pays_choisi.adajacent.size(); k++) {
-                            System.out.print(liste_pays2.get(pays_choisi.adajacent.get(k)).name + " (" + pays_choisi.adajacent.get(k) +
-                                    ") : "  + liste_joueur.get(liste_pays2.get(pays_choisi.adajacent.get(k)).owner).getName() + "   ");
+                            System.out.print(liste_territoire.get(pays_choisi.adajacent.get(k)).name + " (" + pays_choisi.adajacent.get(k) +
+                                    ") : "  + liste_joueur.get(liste_territoire.get(pays_choisi.adajacent.get(k)).owner).getName() + "   ");
                         }
                         if (pays_choisi.soldier.size() + pays_choisi.cannon.size() + pays_choisi.cavalry.size() > 1) {
                             do {
@@ -305,8 +355,8 @@ public class Main {
                                 if (pays_choisi.soldier.size() > 1 || pays_choisi.cannon.size() > 0 || pays_choisi.cavalry.size() > 0) {
                                     System.out.println("Choix de la cible :");
                                     for (int k = 0; k < pays_choisi.adajacent.size(); k++) {
-                                        if (liste_pays2.get(pays_choisi.adajacent.get(k)).owner != ordre_final.get(count)) {
-                                            System.out.print(liste_pays2.get(pays_choisi.adajacent.get(k)).name + " (" + pays_choisi.adajacent.get(k) + ")   ");
+                                        if (liste_territoire.get(pays_choisi.adajacent.get(k)).owner != ordre_final.get(count)) {
+                                            System.out.print(liste_territoire.get(pays_choisi.adajacent.get(k)).name + " (" + pays_choisi.adajacent.get(k) + ")   ");
                                         }
                                     }
                                     System.out.println("\n");
@@ -319,7 +369,7 @@ public class Main {
                                                 scan.nextLine();
                                             }
                                         } while (choix < 0 || choix > 41);
-                                    } while (liste_pays2.get(choix).owner == ordre_final.get(count) || !pays_choisi.adajacent.contains(choix)); //vérification que le pays appratient à un autre joueur et qu'il est à coté
+                                    } while (liste_territoire.get(choix).owner == ordre_final.get(count) || !pays_choisi.adajacent.contains(choix)); //vérification que le pays appratient à un autre joueur et qu'il est à coté
 
                                     int pays_defenseur = choix;
                                     List<Unit> armee_def = new LinkedList<>();
@@ -378,13 +428,13 @@ public class Main {
                                         }
                                     }
                                     if (armee_attaque.size() > 0){
-                                        for (int k = 0; k < liste_pays2.get(pays_defenseur).soldier.size(); k++){
+                                        for (int k = 0; k < liste_territoire.get(pays_defenseur).soldier.size(); k++){
                                             armee_def.add(new Soldier());
                                         }
-                                        for (int k = 0; k < liste_pays2.get(pays_defenseur).cannon.size(); k++){
+                                        for (int k = 0; k < liste_territoire.get(pays_defenseur).cannon.size(); k++){
                                             armee_def.add(new Cannon());
                                         }
-                                        for (int k = 0; k < liste_pays2.get(pays_defenseur).cavalry.size(); k++){
+                                        for (int k = 0; k < liste_territoire.get(pays_defenseur).cavalry.size(); k++){
                                             armee_def.add(new Cavalry());
                                         }
                                         if (armee_def.size() > 2){
@@ -462,33 +512,33 @@ public class Main {
                                             if (max_attaque > max_def){
                                                 System.out.println("Un " + armee_def.get(id_def).name + " adverse a été détruit !");
                                                 if (armee_def.get(id_def).id == 0) {
-                                                    liste_pays2.get(pays_defenseur).soldier.remove(0);
+                                                    liste_territoire.get(pays_defenseur).soldier.remove(0);
                                                 }
                                                 else if(armee_def.get(id_def).id == 1){
-                                                    liste_pays2.get(pays_defenseur).cavalry.remove(0);
+                                                    liste_territoire.get(pays_defenseur).cavalry.remove(0);
                                                 }
                                                 else{
-                                                    liste_pays2.get(pays_defenseur).cannon.remove(0);
+                                                    liste_territoire.get(pays_defenseur).cannon.remove(0);
                                                 }
-                                                if (liste_pays2.get(pays_defenseur).cannon.size() == 0
-                                                        && liste_pays2.get(pays_defenseur).cavalry.size() == 0
-                                                        && liste_pays2.get(pays_defenseur).soldier.size() == 0){
+                                                if (liste_territoire.get(pays_defenseur).cannon.size() == 0
+                                                        && liste_territoire.get(pays_defenseur).cavalry.size() == 0
+                                                        && liste_territoire.get(pays_defenseur).soldier.size() == 0){
                                                     System.out.println("Victoire ! Le pays est conquis !");
-                                                    liste_joueur.get(ordre_final.get(count)).territoire.add(liste_pays2.get(pays_defenseur).id);
+                                                    liste_joueur.get(ordre_final.get(count)).territoire.add(liste_territoire.get(pays_defenseur).id);
                                                     Collections.sort(liste_joueur.get(ordre_final.get(count)).territoire);
-                                                    liste_pays2.get(pays_defenseur).owner = ordre_final.get(count);
+                                                    liste_territoire.get(pays_defenseur).owner = ordre_final.get(count);
                                                     for (int k = 0; k < armee_attaque.size(); k++){
                                                         if(armee_attaque.get(k).id == 0){
                                                             pays_choisi.soldier.remove(0);
-                                                            liste_pays2.get(pays_defenseur).soldier.add(new Soldier());
+                                                            liste_territoire.get(pays_defenseur).soldier.add(new Soldier());
                                                         }
                                                         else if(armee_attaque.get(k).id == 1){
                                                             pays_choisi.cavalry.remove(0);
-                                                            liste_pays2.get(pays_defenseur).cavalry.add(new Cavalry());
+                                                            liste_territoire.get(pays_defenseur).cavalry.add(new Cavalry());
                                                         }
                                                         else{
                                                             pays_choisi.cannon.remove(0);
-                                                            liste_pays2.get(pays_defenseur).cannon.add(new Cannon());
+                                                            liste_territoire.get(pays_defenseur).cannon.add(new Cannon());
                                                         }
                                                     }
                                                 }
@@ -576,7 +626,7 @@ public class Main {
                 Scanner sc = new Scanner(System.in);
                 i = sc.nextInt();
             }while(i < 0 || i > 41);
-            Territoire pays_test = liste_pays2.get(i);
+            Territoire pays_test = liste_territoire.get(i);
 
             System.out.println("Le territoire " + pays_test.name + " est le territoire " + pays_test.territoire +
                     " de la région " + pays_test.region + " et est la propriété de " + liste_joueur.get(pays_test.owner).getName());
@@ -584,7 +634,7 @@ public class Main {
                     + " cavaliers et " + pays_test.cannon.size() + " canons.");
             System.out.println("Le pays a comme pays frontaliers : ");
             for (int k = 0; k < pays_test.adajacent.size(); k++){
-                System.out.print(liste_pays2.get(pays_test.adajacent.get(k)).name + " (" + pays_test.adajacent.get(k)+ ")   ");
+                System.out.print(liste_territoire.get(pays_test.adajacent.get(k)).name + " (" + pays_test.adajacent.get(k)+ ")   ");
             }
             System.out.println("\n");
         }*/
