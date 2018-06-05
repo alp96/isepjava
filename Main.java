@@ -35,86 +35,93 @@ public class Main {
     }
 
     public static List<List<Territoire>> chemin(int id_joueur, int nombre_deplacement, List<List<Territoire>> liste_chemin, List<Territoire> liste_territoire){
-        if (id_joueur == 0) { // à virer quand ca fonctionne
 
-            if (nombre_deplacement != 0) {
-
-                int longueur = liste_chemin.size();
-                List<List<Territoire>> liste_chemin2 = new LinkedList<>();
-                for (int k = 0; k < longueur; k++){
-                    for (int l = 0; l < liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).adajacent.size(); l++){
-                        List<Territoire> ajout_territoire = new LinkedList<>();
-                        liste_chemin2.add(ajout_territoire);
-                        for (int m = 0; m < liste_chemin.get(k).size() - 1; m++){
-                            //if(id_joueur == liste_territoire.get(liste_chemin.get(k).get(m).id).owner) {
-                                ajout_territoire.add(new Territoire(liste_territoire.get(liste_chemin.get(k).get(m).id)));
-                            //}
-                        }
-                        //if(id_joueur == liste_territoire.get(liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).id).owner) {
-                            ajout_territoire.add(new Territoire(liste_territoire.get(liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).id)));
-                        //}
-                    }
-                }
-
-                //System.out.println(liste_chemin2.size());
-                int id_territoire = -1;
-                int territoire_adjacent = -1;
-
-                for (int k = 0; k < liste_chemin2.size(); k++){
-
-                    int dernier_element = liste_chemin2.get(k).size() - 1;
-                    territoire_adjacent++;
-                    if (id_territoire != liste_chemin2.get(k).get(dernier_element).id){
-                        //System.out.println(calcul + " " + calcul_ancien);
-                        territoire_adjacent = 0;
-                        //System.out.println(liste_territoire.get(liste_chemin2.get(k).get(dernier_element).adajacent.get(territoire_adjacent)));
-                        id_territoire = liste_chemin2.get(k).get(dernier_element).id;
-                    }
-                    //if(id_joueur == liste_territoire.get(liste_chemin2.get(k).get(liste_chemin2.get(k).size() - 1).adajacent.get(territoire_adjacent)).owner) {
-                            liste_chemin2.get(k).add(liste_territoire.get(liste_chemin2.get(k).get(dernier_element).adajacent.get(territoire_adjacent)));
-                    //}
-                }
-
-                for (int k = 0; k < liste_chemin2.size(); k++){
-                    for (int j = 0; j < liste_chemin2.get(k).size(); j++){
-                        //System.out.print(liste_chemin2.get(k).get(j).name + "  ");
-                    }
-                    //System.out.println("      ");
-                }
-
-                List<List<Territoire>> liste_chemin3 = new LinkedList<>();
-                for (int k = 0; k < liste_chemin2.size(); k++){
-                    liste_chemin3.add(new LinkedList<>());
-                    for (int j = 0; j < liste_chemin2.get(k).size(); j++) {
-                        if (j == 0 || j == liste_chemin2.get(k).size() - 1){
-                            liste_chemin3.get(k).add(liste_chemin2.get(k).get(j));
+    if (nombre_deplacement != 0) {
+            int longueur = liste_chemin.size();
+            List<List<Territoire>> liste_chemin2 = new LinkedList<>();
+            for (int k = 0; k < longueur; k++){
+                for (int l = 0; l < liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).adajacent.size(); l++){
+                    List<Territoire> ajout_territoire = new LinkedList<>();
+                    liste_chemin2.add(ajout_territoire);
+                    for (int m = 0; m < liste_chemin.get(k).size() - 1; m++){
+                        if(id_joueur == liste_territoire.get(liste_chemin.get(k).get(m).id).owner) {
+                            ajout_territoire.add(new Territoire(liste_territoire.get(liste_chemin.get(k).get(m).id)));
                         }
                     }
-                }
-
-                List<List<Territoire>> liste_chemin3_unique = liste_chemin3.stream()
-                        .distinct()               // it will remove duplicate object, It will check duplicate using equals method
-                        .collect(Collectors.toList());
-
-                System.out.println("Essai " + nombre_deplacement);
-                for (Iterator<List<Territoire>> iter = liste_chemin3_unique.listIterator(); iter.hasNext();){
-                    List<Territoire> territoireList = iter.next();
-                    if(territoireList.get(0).id == territoireList.get(territoireList.size() - 1).id){
-                        iter.remove();
+                    if(id_joueur == liste_territoire.get(liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).id).owner) {
+                        ajout_territoire.add(new Territoire(liste_territoire.get(liste_chemin.get(k).get(liste_chemin.get(k).size() - 1).id)));
                     }
                 }
-                for (int k = 0; k < liste_chemin3_unique.size(); k++){
-                    for (int j = 0; j < liste_chemin3_unique.get(k).size(); j++){
-                        System.out.print(liste_chemin3_unique.get(k).get(j).name + "  ");
+            }
+
+            int id_territoire = -1;
+            int territoire_adjacent = -1;
+
+            for (int k = 0; k < liste_chemin2.size(); k++){
+
+                int dernier_element = liste_chemin2.get(k).size() - 1;
+                territoire_adjacent++;
+                if (id_territoire != liste_chemin2.get(k).get(dernier_element).id){
+                    //System.out.println(calcul + " " + calcul_ancien);
+                    territoire_adjacent = 0;
+                    //System.out.println(liste_territoire.get(liste_chemin2.get(k).get(dernier_element).adajacent.get(territoire_adjacent)));
+                    id_territoire = liste_chemin2.get(k).get(dernier_element).id;
+                }
+                if(id_joueur == liste_territoire.get(liste_chemin2.get(k).get(liste_chemin2.get(k).size() - 1).adajacent.get(territoire_adjacent)).owner) {
+                        liste_chemin2.get(k).add(liste_territoire.get(liste_chemin2.get(k).get(dernier_element).adajacent.get(territoire_adjacent)));
+                }
+            }
+
+            //Ne garde que le premier et le dernier élement de chaque liste-chemin
+            List<List<Territoire>> liste_chemin3 = new LinkedList<>();
+            for (int k = 0; k < liste_chemin2.size(); k++){
+                liste_chemin3.add(new LinkedList<>());
+                for (int j = 0; j < liste_chemin2.get(k).size(); j++) {
+                    if (j == 0 || j == liste_chemin2.get(k).size() - 1){
+                        liste_chemin3.get(k).add(liste_chemin2.get(k).get(j));
+                    }
+                }
+            }
+
+            //retire les chemins départ/destinations identiques
+            for (Iterator<List<Territoire>> iter = liste_chemin3.listIterator(); iter.hasNext();){
+                List<Territoire> territoireList = iter.next();
+                if(territoireList.get(0).id == territoireList.get(territoireList.size() - 1).id){
+                    iter.remove();
+                }
+            }
+
+            //Retire les doublons de la liste
+            List<List<Territoire>> liste_chemin4 = new LinkedList<>();
+            for (int k = 0; k < liste_chemin3.size(); k++){
+                String a_chercher = liste_chemin3.get(k).get(1).name;
+                boolean pas_present = true;
+                for(int j = 0; j < liste_chemin4.size(); j++){
+                    if (liste_chemin4.get(j).get(1).name == a_chercher) {
+                        pas_present = false;
+                        break;
+                    }
+                }
+                if (pas_present == true){
+                    liste_chemin4.add(liste_chemin3.get(k));
+                }
+            }
+
+
+            //Affichage des résultats
+            /*if (nombre_deplacement == 1) {
+                for (int k = 0; k < liste_chemin4.size(); k++) {
+                    for (int j = 0; j < liste_chemin4.get(k).size(); j++) {
+                        System.out.print(liste_chemin4.get(k).get(j).name + "  ");
                     }
                     System.out.println("      ");
                 }
+            }*/
 
-
-                chemin(id_joueur, nombre_deplacement-1, liste_chemin3_unique, liste_territoire);
-            }
+            //itérations sur la valeur de déplacement de l'unité
+            chemin(id_joueur, nombre_deplacement-1, liste_chemin4, liste_territoire);
         }
-        return liste_chemin;
+    return liste_chemin;
 
     }
 
@@ -145,7 +152,7 @@ public class Main {
         liste_couleur.add(Color.red);
         liste_couleur.add(Color.green);
         liste_couleur.add(Color.yellow);
-        liste_couleur.add(Color.white);
+        liste_couleur.add(Color.orange);
         liste_couleur.add(Color.black);
 
         List<String> liste_relation = new LinkedList<>(Arrays.asList("0002","0003","0102","0103","0121","0200","0201","0203",
@@ -290,23 +297,6 @@ public class Main {
 
                 System.out.println("Au tour de " + liste_joueur.get(tour_joueur).getName() + " !");
 
-                List<List<Territoire>> tetest = new LinkedList<>();
-                List<Territoire> tetetest = new LinkedList<>();
-                List<Territoire> tetetest2 = new LinkedList<>();
-                List<List<Territoire>> resultat = new LinkedList<>();
-                tetetest.add(liste_territoire.get(liste_joueur.get(0).territoire.get(0)));
-                //tetetest.add(new Territoire(liste_territoire.get(liste_territoire.get(liste_joueur.get(0).territoire.get(0)).adajacent.get(0))));
-                //tetetest2.add(liste_territoire.get(liste_joueur.get(0).territoire.get(1)));
-                //tetetest2.add(new Territoire(liste_territoire.get(liste_territoire.get(liste_joueur.get(0).territoire.get(1)).adajacent.get(0))));
-                tetest.add(tetetest);
-                //tetest.add(tetetest2);
-                resultat = chemin(ordre_final.get(count),3,tetest, liste_territoire);
-
-                System.out.println(resultat);
-
-                if(resultat.size() == 1){
-                    System.out.println("Pas de déplacement disponible !");
-                }
 
                 if (liste_joueur.get(tour_joueur).isHuman){
                     System.out.println("Liste de vos territoires (ID) :");
@@ -568,38 +558,88 @@ public class Main {
                                                 }
                                             }
                                         }
-
-                                        /*do {
-
-                                            int prio_att = 0;
-                                            int prio_def = 0;
-                                            List<Integer> max = new ArrayList<>();
-                                            max.add(max_attaque);
-                                            max.add(max_def);
-                                            for (int k = 0; k < 2; k++) { //on parcoure les 2 listes de dés pour trouver le max
-                                                for (int j = 0; j < liste_tirage.get(k).size(); j++) {
-                                                    if (max.get(k) < liste_tirage.get(k).get(j)){
-                                                        max.set(k,liste_tirage.get(k).get(j));
-                                                        if (k == 0) {
-                                                            prio_att = liste_armee.get(k).get(j).getPriorityATT();
-                                                        }
-                                                        else{
-                                                            prio_def = liste_armee.get(k).get(j).getPriorityDEF();
-                                                        }
-                                                    }
-                                                    else if (max.get(k) == liste_tirage.get(k).get(j)){
-                                                        if (liste_armee.get(k).get(j).getPriorityATT() > prio_att && k == 0){
-
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }while(armee_attaque.size() != 0 || armee_def.size() != 0);*/
                                     }
                                     break;
 
                                 } else {
                                     System.out.println("Pas assez de troupes pour attaquer un voison !");
+                                }
+                            }
+                            else if (choix == 2){
+                                System.out.println("Choissisez combien d'unités envoyer :");
+                                List<Unit> armee_deplacement = new LinkedList<>();
+                                if (pays_choisi.soldier.size() > 0){
+                                    System.out.println("Combien de soldats à envoyer ?");
+                                    do{
+                                        try {
+                                            choix = scan.nextInt();
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Merci de rentrer un nombre valide !");
+                                            scan.nextLine();
+                                        }
+                                    } while (choix < 0 || choix > pays_choisi.soldier.size());
+                                    for (int k = 0; k < choix; k++){
+                                        armee_deplacement.add(new Soldier());
+                                    }
+                                }
+                                if (pays_choisi.cavalry.size() > 0){
+                                    System.out.println("Combien de cavaliers à envoyer ?");
+                                    do{
+                                        try {
+                                            choix = scan.nextInt();
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Merci de rentrer un nombre valide !");
+                                            scan.nextLine();
+                                        }
+                                    } while (choix < 0 || choix > pays_choisi.cavalry.size());
+                                    for (int k = 0; k < choix; k++){
+                                        armee_deplacement.add(new Cavalry());
+                                    }
+                                }
+                                if (pays_choisi.cannon.size() > 0){
+                                    System.out.println("Combien de canons à envoyer ?");
+                                    do{
+                                        try {
+                                            choix = scan.nextInt();
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Merci de rentrer un nombre valide !");
+                                            scan.nextLine();
+                                        }
+                                    } while (choix < 0 || choix > pays_choisi.cannon.size());
+                                    for (int k = 0; k < choix; k++){
+                                        armee_deplacement.add(new Cannon());
+                                    }
+                                }
+                                int deplacement = 100;
+                                for (int k = 0; k < armee_deplacement.size(); k++){
+                                    if (armee_deplacement.get(k).getMpt() < deplacement){
+                                        deplacement = armee_deplacement.get(k).getMpt();
+                                    }
+                                }
+                                List<List<Territoire>> chemin_disponible = new LinkedList<>();
+                                List<List<Territoire>> chemin_resultat;
+                                List<Territoire> chemin_depart = new LinkedList<>();
+                                chemin_depart.add(pays_choisi);
+                                chemin_disponible.add(chemin_depart);
+
+                                System.out.print(pays_choisi.name + " déplacement " + deplacement);
+
+
+                                System.out.println("Choissiez le pays de déplacement :");
+                                System.out.println(tour_joueur);
+
+                                chemin_resultat = chemin(tour_joueur,deplacement,chemin_disponible,liste_territoire);
+
+                                if (!(chemin_resultat.size() == 1 && chemin_resultat.get(0).size() == 1)){
+                                    for (int k = 0; k < chemin_resultat.size(); k++) {
+                                        for (int j = 0; j < chemin_resultat.get(k).size(); j++) {
+                                            System.out.println((k + 1) + ") " + chemin_resultat.get(k).get(0).name);
+                                        }
+                                    }
+                                }
+
+                                else{
+                                    System.out.println("Pas de territoire en votre possession à proximité !");
                                 }
                             }
                         }

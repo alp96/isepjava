@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,10 +10,15 @@ public class Territoire {
     int id;
     int region;
     int territoire;
+    int coordonnee_x;
+    int coordonnee_y;
     List<Integer> adajacent = new LinkedList<Integer>();
     List<Soldier> soldier = new LinkedList<>();
     List<Cannon> cannon = new LinkedList<>();
     List<Cavalry> cavalry = new LinkedList<>();
+    Color couleur;
+
+
 
     public Territoire(String name, int id, int region, int territoire) {
         this.name = name;
@@ -31,5 +37,8 @@ public class Territoire {
         this.soldier = other.soldier;
         this.cannon = other.cannon;
         this.cavalry = other.cavalry;
+        this.couleur = other.couleur;
+        this.coordonnee_x = other.coordonnee_x;
+        this.coordonnee_y = other.coordonnee_y;
     }
 }
