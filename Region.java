@@ -1,55 +1,14 @@
+import java.util.LinkedList;
+import java.util.List;
 
-import java.util.*;
+public class Region{
+    String name;
+    List<Territoire> liste_territoire;
+    int valeur_renfort;
 
-/**
- * 
- */
-public class Region {
-
-    /**
-     * Default constructor
-     */
-    public Region() {
-    }
-
-    /**
-     * 
-     */
-    public String name;
-
-    /**
-     * 
-     */
-    /**public void boolean{
-
-    }*/
-
-
-    /**
-     * @param name
-     */
-    public void setName(String name) {
+    public Region(String name, List<Territoire> liste_territoire, int valeur_renfort) {
         this.name = name;
-    }
-
-    /**
-     * @return
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * @param listTerritoire
-     */
-    public void setTheBiggest(int listTerritoire) {
-    }
-
-    /**
-     * @return
-     * TODO Set the biggest (maybe not in this class)
-     */
-    public Region getTheBiggest() {
-        return null;
+        this.liste_territoire = liste_territoire;
+        this.valeur_renfort = valeur_renfort;
     }
 }

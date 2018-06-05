@@ -1,9 +1,3 @@
-
-import java.util.*;
-
-/**
- * 
- */
 public class Mission {
     int joueurs_min;
     int joueurs_max;

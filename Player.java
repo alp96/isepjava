@@ -1,11 +1,7 @@
-
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 
- */
 public class Player {
 
     private String name;
@@ -16,9 +12,6 @@ public class Player {
     boolean isHuman;
 
 
-    /**
-     * Default constructor
-     */
     public Player(String name, Color color, int mission, int ravitaillement) {
         this.name = name;
         this.color = color;
@@ -54,30 +47,18 @@ public class Player {
         this.territoire = territoire;
     }
 
-    /**
-     * @param name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * @return
-     */
     public String getName() {
         return this.name;
     }
 
-    /**
-     * @param color
-     */
     public void setColor(Color color) {
         this.color = color;
     }
 
-    /**
-     * @return
-     */
     public Color getColor() {
         return this.color;
     }

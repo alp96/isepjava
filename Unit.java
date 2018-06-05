@@ -1,9 +1,3 @@
-
-import java.util.*;
-
-/**
- * 
- */
 public abstract class Unit {
 
     private int cost;
@@ -13,10 +7,6 @@ public abstract class Unit {
     private int priorityDEF;
     public int id;
     public String name;
-
-    /**
-     * Movement per turn and counter per turn
-     */
     private int mpt;
     private int cpt = 0;
 

@@ -1,14 +1,9 @@
-import jdk.management.cmm.SystemResourcePressureMXBean;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-
 import static java.lang.Math.floor;
-import static java.lang.Thread.sleep;
 
 public class Main {
 
