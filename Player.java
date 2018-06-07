@@ -10,6 +10,7 @@ public class Player {
     public int ravitaillement;
     List<Integer> territoire = new LinkedList<>();
     boolean isHuman;
+    int renfort_paysconquis;
 
 
     public Player(String name, Color color, int mission, int ravitaillement) {

@@ -11,12 +11,11 @@ public class Territoire {
     int territoire;
     int coordonnee_x;
     int coordonnee_y;
-    List<Integer> adajacent = new LinkedList<Integer>();
+    List<Integer> adjacent = new LinkedList<>();
     List<Soldier> soldier = new LinkedList<>();
     List<Cannon> cannon = new LinkedList<>();
     List<Cavalry> cavalry = new LinkedList<>();
     Color couleur;
-
 
 
     public Territoire(String name, int id, int region, int territoire) {
@@ -31,7 +30,7 @@ public class Territoire {
         this.region = other.region;
         this.territoire = other.territoire;
         this.id = other.id;
-        this.adajacent = other.adajacent;
+        this.adjacent = other.adjacent;
         this.owner = other.owner;
         this.soldier = other.soldier;
         this.cannon = other.cannon;
