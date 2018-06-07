@@ -40,21 +40,23 @@ public class Main {
     public static void ravitaillement(int nombre_joueur, List<Player> liste_joueur, List<Unit> liste_unite, List<Territoire> liste_territoire){
         for (int k = 0; k < nombre_joueur; k++){
             while(liste_joueur.get(k).ravitaillement > 0) {
-                int choix_unite;
-                do {
-                    choix_unite = ThreadLocalRandom.current().nextInt(0, 3);
-                } while (liste_unite.get(choix_unite).getCost() > liste_joueur.get(k).ravitaillement);
-                int choix_pays = ThreadLocalRandom.current().nextInt(0, liste_joueur.get(k).territoire.size());
-                if (choix_unite == 0) {
-                    liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).soldier.add(new Soldier());
+                if (liste_joueur.get(k).isHuman) {
+
+                } else {
+                    int choix_unite;
+                    do {
+                        choix_unite = ThreadLocalRandom.current().nextInt(0, 3);
+                    } while (liste_unite.get(choix_unite).getCost() > liste_joueur.get(k).ravitaillement);
+                    int choix_pays = ThreadLocalRandom.current().nextInt(0, liste_joueur.get(k).territoire.size());
+                    if (choix_unite == 0) {
+                        liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).soldier.add(new Soldier());
+                    } else if (choix_unite == 1) {
+                        liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cavalry.add(new Cavalry());
+                    } else {
+                        liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cannon.add(new Cannon());
+                    }
+                    liste_joueur.get(k).ravitaillement -= liste_unite.get(choix_unite).getCost();
                 }
-                else if(choix_unite == 1){
-                    liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cavalry.add(new Cavalry());
-                }
-                else{
-                    liste_territoire.get(liste_joueur.get(k).getTerritoire().get(choix_pays)).cannon.add(new Cannon());
-                }
-                liste_joueur.get(k).ravitaillement -= liste_unite.get(choix_unite).getCost();
             }
         }
     }
@@ -337,7 +339,6 @@ public class Main {
                 while(liste_joueur.get(tour_joueur).territoire.isEmpty()){
                     count++;
                     tour_joueur = ordre_final.get(count);
-                    System.out.println("10");
                 }
                 for (int k = 0; k < 6; k++){
                     boolean gagnant = true;
@@ -366,15 +367,17 @@ public class Main {
                     Scanner scan = new Scanner(System.in);
                     while (0<1) {
                         int choix = -1;
+                        int compteur_troupes = 0;
                         do { //vérification de l'input user
                             if (liste_joueur.get(tour_joueur).isHuman) {
                                 System.out.println("\nChoisissez avec quel territoire vous désirez interagir");
                                 choix = input("Merci de rentrer l'ID d'un territoire", 0, 41);
                             } else{
                                 do {
-                                    choix = ThreadLocalRandom.current().nextInt(0, 41);
-                                }while (liste_territoire.get(choix).cavalry.size() + liste_territoire.get(choix).cannon.size()
-                                        +liste_territoire.get(choix).soldier.size() <= 1);
+                                    compteur_troupes++;
+                                    choix = ThreadLocalRandom.current().nextInt(0, 42);
+                                }while ((liste_territoire.get(choix).cavalry.size() + liste_territoire.get(choix).cannon.size()
+                                        +liste_territoire.get(choix).soldier.size() <= 1 ) || compteur_troupes < 1000);
                             }
                         } while (liste_territoire.get(choix).owner != ordre_final.get(count));
 
@@ -428,11 +431,10 @@ public class Main {
                                         if (liste_joueur.get(tour_joueur).isHuman) {System.out.println("\n");}
                                         do {
                                             if (liste_joueur.get(tour_joueur).isHuman) {
-                                                choix = input("Merci de rentrer un nombre valide !", 0, 41);
+                                                choix = input("Merci de rentrer un nombre valide !", 0, 42);
                                             }else{
-                                                choix = ThreadLocalRandom.current().nextInt(0,41);
+                                                choix = ThreadLocalRandom.current().nextInt(0,42);
                                             }
-                                            System.out.println("0");
                                         }
                                         while (liste_territoire.get(choix).owner == ordre_final.get(count) || !pays_choisi.adjacent.contains(choix)); //vérification que le pays appratient à un autre joueur et qu'il est à coté
 
@@ -460,7 +462,6 @@ public class Main {
                                                     }
                                                 } else{
                                                     choix = ThreadLocalRandom.current().nextInt(0,4);
-                                                    System.out.println("1");
                                                 }
                                             }
                                             while (choix < 0 || choix > pays_choisi.soldier.size() || choix > 3 || choix >= unite_total);
@@ -481,7 +482,6 @@ public class Main {
                                                         }
                                                     } else{
                                                         choix = ThreadLocalRandom.current().nextInt(0,4);
-                                                        System.out.println("2");
                                                     }
                                                 }
                                                 while (choix < 0 || choix > pays_choisi.cavalry.size() || choix + armee_attaque.size() > 3 || choix + armee_attaque.size() >= unite_total);
@@ -532,10 +532,6 @@ public class Main {
                                                     armee_def.remove(k);
                                                 }
                                             }
-
-                                            //System.out.println(armee_attaque);
-                                            //System.out.println(armee_def);
-
 
                                             List<List<Integer>> liste_tirage = new LinkedList();
                                             List<List<Unit>> liste_armee = new LinkedList<>();
@@ -653,6 +649,7 @@ public class Main {
                                                     }
                                                 }
                                             }
+                                            System.out.println(armee_attaque.size());
                                         }
                                     }
                                     else{
